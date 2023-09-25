@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+    <!--    <link href="bootstrap-5.3.0-dist/css/bootstrap.min.css" rel="stylesheet">-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+
+    <script src="jQuery/jquery-3.7.1.min.js"></script>
+
+    <title>register</title>
+
+    <style>
+        .Head-banner {
+            height: 45px;
+            background-color: #0a53be;
+        }
+
+        .Head-banner .head-icon {
+            height: 30px;
+            width: 30px;
+        }
+
+        .check-code {
+            height: 50px;
+            width: 120px;
+        }
+
+        .house-icon {
+            height: 30px;
+            width: 30px;
+        }
+
+        form > .container-fluid {
+            padding-right: 30px;
+            padding-left: 0px;
+        }
+
+        .welcome-text {
+            color: #b6d4fe;
+        }
+
+        .error-msg {
+            color: red;
+        }
+
+        .register-form {
+            background-color: beige;
+            border-top: #0a3622;
+            border-top-style: dotted;
+        }
+
+    </style>
+
+    <script type="text/javascript">
+        // $(function () {
+        //     $('#datepicker').datepicker({format: 'yyyy-mm-dd'});
+        // })
+
+
+        function checkAccount() {
+            var account = $("#account-input").val();
+            var reg_account = /^\w{8,20}$/;
+            var flag = reg_account.test(account);
+            if (flag) {
+                // account reg valid
+                $("#account-input").css("border", "")
+                $("#account-error").text("")
+
+                return flag;
+            } else {
+                // account reg invalid
+                $("#account-input").css("border", "1px solid red")
+                $("#account-error").text("Account invalid")
+
+                return flag;
+            }
+        }
+
+        function checkUserName() {
+            var username = $("#username-input").val();
+            var reg_username = /^\w{8,20}$/;
+            var flag = reg_username.test(username);
+            if (flag) {
+                // valid
+                $("#username-input").css("border", "")
+                $("#username-error").text("");
+
+                return flag;
+            } else {
+                // invalid
+                $("#username-input").css("border", "1px solid red")
+                $("#username-error").text("User Name invalid");
+
+                return flag;
+            }
+        }
+
+        function checkEmail() {
+            var email = $("#email-input").val();
+            var reg_email = /^\w+@\w+\.\w+$/;
+            var flag = reg_email.test(email);
+            if (flag) {
+                // valid
+                $("#email-input").css("border", "")
+                $("#email-error").text("");
+
+                return flag;
+            } else {
+                // invalid
+                $("#email-input").css("border", "1px solid red")
+                $("#email-error").text("User Name invalid");
+
+                return flag;
+            }
+        }
+
+        function checkPhoneNumber() {
+            var phoneNumber = $("#phone-input").val();
+            var reg_phoneNumber = /^\d{10}$/;
+            var flag = reg_phoneNumber.test(phoneNumber);
+
+            if (flag) {
+                // valid
+                $("#phone-input").css("border", "")
+                $("#phone-error").text("");
+
+                return flag;
+            } else {
+                // invalid
+                $("#phone-input").css("border", "1px solid red")
+                $("#phone-error").text("Phone Name invalid ex: 0987654321");
+
+                return flag;
+            }
+        }
+
+        function checkBirthday() {
+            var birthday = $("#birthday").val();
+            var flag = birthday != null && birthday.length > 0;
+
+            if (flag) {
+                // valid
+                $("#birthday").css("border", "")
+                $("#birthday-error").text("");
+
+                return flag;
+            } else {
+                // invalid
+                $("#birthday").css("border", "1px solid red")
+                $("#birthday-error").text("Date invalid");
+
+                return flag;
+            }
+
+        }
+
+        function checkPassword() {
+            var password = $("#password-input").val();
+            var reg_password = /^\w{8,20}$/;
+            var flag = reg_password.test(password);
+            if (flag) {
+                // valid
+                $("#password-input").css("border", "")
+                $("#password-error").text("");
+
+                return flag
+            } else {
+                // invalid
+                $("#password-input").css("border", "1px solid red")
+                $("#password-error").text("Password invalid");
+
+                return flag
+            }
+        }
+
+        function checkConfirmPassword() {
+            var confirmPassword = $("#confirm-password-input").val();
+            var reg_confirmPassword = $("#password-input").val();
+            var reg1_confirmPassword = /^\w{8,20}$/;
+            var flag = reg_confirmPassword == confirmPassword && reg1_confirmPassword.test(confirmPassword);
+
+            if (flag) {
+                $("#confirm-password-input").css("border", "1px solid green")
+                $("#confirm-password-error").text("Confirm success").css("color", "green");
+
+                return flag;
+            } else {
+                $("#confirm-password-input").css("border", "1px solid red")
+                $("#confirm-password-error").text("Confirm failed");
+
+                return flag;
+            }
+        }
+
+        function dateLimitFormat() {
+            var date = new Date();
+            var dateFormat = date.getFullYear() + "-0" + (date.getMonth() + 1) + "-" + date.getDate();
+            return dateFormat;
+        }
+
+        $(function () {
+            $("#birthday").attr("max", dateLimitFormat());
+            $("#registerForm").submit(function () {
+                if (checkAccount() && checkUserName() && checkPassword() && checkConfirmPassword() && checkEmail() && checkPhoneNumber() && checkBirthday()) {
+                    $.post("user/register", $("#registerForm").serialize(), function (date) {
+                        if (date.flag) {
+                            location.href = 'registerSuccess.html';
+                        } else {
+                            $("#err_msg").text(date.errorMsg);
+                        }
+                    });
+                }
+                return false;
+            });
+
+            $("#checkCode").click(function () {
+                var date = new Date().getTime();
+                $("#checkCode").attr("src", "/checkCodeServlet?" + date)
+            });
+
+            $("#account-input").blur(checkAccount);
+            $("#username-input").blur(checkUserName);
+            $("#password-input").blur(checkPassword);
+            $("#confirm-password-input").blur(checkConfirmPassword)
+            $("#email-input").blur(checkEmail);
+            $("#phone-input").blur(checkPhoneNumber);
+            $("#birthday").blur(checkBirthday);
+        });
+    </script>
+</head>
+<body>
+<div class="Head-banner">
+    <div class="container">
+        <div class="row ">
+            <div class="col-2">
+                <img src="picture/house.png" class="house-icon mt-2">
+            </div>
+            <div class="col-2 offset-8 col-md-1 offset-md-9">
+                <div class="item">
+                    <img src="picture/head.png" class="img-thumbnail head-icon mt-2">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container h-100 mt-3">
+    <div class="row justify-content-center mb-3">
+        <div class="col-8 text-center welcome-text">
+            <h1>Welcome, Fill out the form to register.</h1>
+        </div>
+    </div>
+    <div class="row h-75 justify-content-center align-items-center">
+        <div class="col-8 col-md-6 col-lg-5 register-form">
+            <form action="/user/active" id="registerForm">
+                <div class="mb-3">
+                    <label class="form-label fs-5">Account</label>
+                    <label class="error-msg fs-6 ms-3" id="account-error"></label>
+                    <input type="text" class="form-control" id="account-input" name="account">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Email address</label>
+                    <label class="error-msg fs-6 ms-3" id="email-error"></label>
+                    <input type="email" class="form-control" aria-describedby="emailHelp" id="email-input" name="email">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">User Name</label>
+                    <label class="error-msg fs-6 ms-3" id="username-error"></label>
+                    <input type="text" class="form-control" id="username-input" name="username">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Phone Number</label>
+                    <label class="error-msg fs-6 ms-3" id="phone-error"></label>
+                    <input type="text" class="form-control" id="phone-input" name="phone">
+                </div>
+                <div class="mb-3 container-fluid">
+                    <label class="form-label">Gender</label>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="gender" value="male" checked>
+                                <label class="form-check-label">Male</label>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="gender" value="female">
+                                <label class="form-check-label">Female</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="birthday" class="form-label">Birthday</label>
+                    <label class="error-msg fs-6 ms-3" id="birthday-error"></label>
+                    <!--                    <div class="input-group date" id="">-->
+                    <input type="date" class="form-control" id="birthday" name="birthday"/>
+                    <!--                        <span class="input-group-append">-->
+                    <!--                            <span class="input-group-text bg-light d-block">-->
+                    <!--                                <i class="fa fa-calendar"></i>-->
+                    <!--                                 <img src="picture/calendar.png" height="30" width="30">-->
+                    <!--                              </span>-->
+                    <!--                         </span>-->
+                    <!--                    </div>-->
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Password</label>
+                    <label class="error-msg fs-6 ms-3" id="password-error"></label>
+                    <input type="password" class="form-control" id="password-input" name="password">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Confirm Password</label>
+                    <label class="error-msg fs-6 ms-3" id="confirm-password-error"></label>
+                    <input type="password" class="form-control" id="confirm-password-input">
+                </div>
+
+                <div class="mb-3 container-fluid">
+                    <div class="row">
+                        <div class="col-6">
+                            <label class="form-label">Check Code</label>
+                            <label class="error-msg fs-6 ms-3" id="check-code-error"></label>
+                            <input type="text" class="form-control" id="check-code-input" name="checkCode">
+                        </div>
+                        <div class="col-4 align-self-end">
+                            <img src="/checkCodeServlet" class="check-code" id="checkCode">
+                        </div>
+                    </div>
+                </div>
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-2">
+                            <button type="submit" class="btn btn-primary mb-3" id="submit-register-form">Submit</button>
+                        </div>
+                        <div class="col-8 error-msg" id="err_msg"></div>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+</div>
+
+<!--<script src="./bootstrap-5.3.0-dist/js/bootstrap.bundle.min.js"></script>-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+        crossorigin="anonymous"></script>
+</body>
+</html>

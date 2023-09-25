@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+
+    <script src="jQuery/jquery-3.7.1.min.js"></script>
+
+    <title>Login</title>
+
+    <script>
+        $(function(){
+
+            $("#loginForm").submit(function () {
+                    $.post("user/login", $("#loginForm").serialize(), function (date) {
+                        if (date.flag) {
+                            location.href = 'registerSuccess.html';
+                        } else {
+                            $("#err_msg").text(date.errorMsg);
+                        }
+                    });
+                return false;
+            });
+            $("#checkCode").click(function () {
+                var date = new Date().getTime();
+                $("#checkCode").attr("src", "/checkCodeServlet?" + date)
+            });
+        })
+    </script>
+</head>
+<body>
+
+<div class="container">
+    <div class="row justify-content-center mb-3">
+        <div class="col-8 text-center welcome-text">
+            <h1>Login Page</h1>
+        </div>
+    </div>
+    <div class="row h-75 justify-content-center align-items-center">
+        <div class="col-8 col-md-6 col-lg-5 register-form">
+            <form action="/user/active" id="loginForm">
+                <div class="mb-3">
+                    <label class="form-label fs-5">Account</label>
+                    <label class="error-msg fs-6 ms-3" id="account-error"></label>
+                    <input type="text" class="form-control" id="account-input" name="account">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Password</label>
+                    <label class="error-msg fs-6 ms-3" id="password-error"></label>
+                    <input type="password" class="form-control" id="password-input" name="password">
+                </div>
+                <div class="mb-3 container-fluid">
+                    <div class="row">
+                        <div class="col-6">
+                            <label class="form-label">Check Code</label>
+                            <label class="error-msg fs-6 ms-3" id="check-code-error"></label>
+                            <input type="text" class="form-control" id="check-code-input" name="checkCode">
+                        </div>
+                        <div class="col-4 align-self-end">
+                            <img src="/checkCodeServlet" class="check-code" id="checkCode">
+                        </div>
+                    </div>
+                </div>
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-2">
+                            <button type="submit" class="btn btn-primary mb-3" id="submit-register-form">Login</button>
+                        </div>
+                        <div class="col-8 error-msg" id="err_msg"></div>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+<!--<script src="bootstrap-5.3.0-dist/js/bootstrap.bundle.min.js"></script>-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+
+</body>
+</html>
