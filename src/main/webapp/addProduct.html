@@ -1,0 +1,75 @@
+
+<html>
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Bootstrap CSS -->
+  <link href="bootstrap-5.3.0-dist/css/bootstrap.min.css" rel="stylesheet">
+  <title>addUser</title>
+
+
+</head>
+<body>
+
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-auto">
+      <h1>Add User Page</h1>
+    </div>
+  </div>
+  <form action="addUserServlet" method="post">
+    <div class="row justify-content-center">
+      <div class="col col-5">
+        <label for="productName" class="form-label">ProductName</label>
+        <input type="text" class="form-control" id="userName" name="username">
+      </div>
+    </div>
+    <div class="row justify-content-center">
+      <div class="col col-5">
+        <label for="Password" class="form-label">Password</label>
+        <input type="text" class="form-control" id="Password" name="password">
+      </div>
+    </div>
+    <div class="row justify-content-center">
+      <div class="col-5">
+        <label for="email" class="form-label">Email address</label>
+        <input type="email" class="form-control" id="email" aria-describedby="emailHelp" name="email">
+        <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+      </div>
+    </div>
+
+    <div class="row justify-content-center" style="margin-top: 5px">
+      <div class="col-5">
+        <label for="birthday" class="form-label">Birthday</label>
+        <div class="input-group date" id="datepicker">
+          <input type="text" class="form-control" id="birthday" name="birthday"/>
+          <span class="input-group-append">
+                            <span class="input-group-text bg-light d-block">
+<%--                                <i class="fa fa-calendar"></i>--%>
+                                 <img src="icon/calendar.png" height="24" width="24">
+                              </span>
+                         </span>
+        </div>
+      </div>
+    </div>
+    <div class="row justify-content-center" style="margin-top: 10px">
+      <div class="col-1">
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </div>
+      <div class="col-1">
+        <a class="btn btn-primary" href="${pageContext.request.contextPath}/addUser.jsp">Empty</a>
+        <%--                <button type="submit" class="btn btn-primary">Empty</button>--%>
+      </div>
+    </div>
+  </form>
+</div>
+
+</div>
+
+
+<!-- Bootstrap Bundle with Popper -->
+<script src="bootstrap-5.3.0-dist/js/bootstrap.bundle.min.js"></script>
+</script>
+</body>
+</html>
