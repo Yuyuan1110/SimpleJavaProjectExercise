@@ -20,18 +20,17 @@ public class CharacterFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse resp = (HttpServletResponse) response;
 
-        String method =req.getMethod();
-        if(method.equalsIgnoreCase("post")){
+        String method = req.getMethod();
+        if (method.equalsIgnoreCase("post")) {
             req.setCharacterEncoding("utf-8");
         }
         String uri = req.getRequestURI();
-        response.setContentType("text/html;charset=utf-8");
-        if(uri.contains(".css")|| uri.contains(".js")|| uri.contains(".png")){
-            resp.setContentType("text/css;charset=utf-8");
-        }{
-            resp.setContentType("text/html;charset=utf-8");
+        if (uri.contains("/bootstrap-5.3.0-dist")) {
+            chain.doFilter(request, response);
+        } else {
+            response.setContentType("text/html;charset=utf-8");
+            chain.doFilter(req, resp);
         }
-        chain.doFilter(req, resp);
     }
 
 
