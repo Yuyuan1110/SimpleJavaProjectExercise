@@ -1,5 +1,7 @@
 package travel.web.servlet;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -27,5 +29,18 @@ public class BaseServlet extends HttpServlet {
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    //convert input data to json, then return to client.
+    public void writeValue(Object obj, HttpServletResponse resp) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        resp.setContentType("application/json;charset=utf-8");
+        mapper.writeValue(resp.getOutputStream(), obj);
+    }
+
+    //convert input data to json, return String to caller
+    public String writeValueAsString(Object obj, HttpServletResponse resp) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.writeValueAsString(obj);
     }
 }

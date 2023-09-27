@@ -14,7 +14,7 @@
             $("#loginForm").submit(function () {
                     $.post("user/login", $("#loginForm").serialize(), function (date) {
                         if (date.flag) {
-                            location.href = 'registerSuccess.html';
+                            location.href = 'demoList.html';
                         } else {
                             $("#err_msg").text(date.errorMsg);
                         }

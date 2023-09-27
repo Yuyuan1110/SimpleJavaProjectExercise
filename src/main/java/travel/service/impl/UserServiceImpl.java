@@ -27,7 +27,7 @@ public class UserServiceImpl implements UserService {
             user.setActive_code(active_code);
             userDao.save(user);
 
-            String context = "click following link to authentication \n http://localhost/user/active?active_code="+active_code;
+            String context = "click following link to authentication. (availed time: 15 minutes) \n http://localhost/user/active?active_code="+active_code;
             Gmailer gmailer = new GmailerImpl();
             try {
                 gmailer.SendEmail(user.getEmail(), "Email authentication", context);

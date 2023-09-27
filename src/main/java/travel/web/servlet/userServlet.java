@@ -40,10 +40,11 @@ public class userServlet extends BaseServlet {
             info.setFlag(false);
             info.setErrorMsg("verification code failed");
 
-            ObjectMapper mapper = new ObjectMapper();
-            String json = mapper.writeValueAsString(info);
-
-            resp.setContentType("application/json;charset=utf-8");
+//            ObjectMapper mapper = new ObjectMapper();
+//            String json = mapper.writeValueAsString(info);
+//
+//            resp.setContentType("application/json;charset=utf-8");
+            String json = super.writeValueAsString(info, resp);
             resp.getWriter().write(json);
             return;
         }
@@ -73,10 +74,7 @@ public class userServlet extends BaseServlet {
             info.setErrorMsg("registration fail");
         }
 
-        ObjectMapper mapper = new ObjectMapper();
-        String json = mapper.writeValueAsString(info);
-
-        resp.setContentType("application/json;charset=utf-8");
+        String json = super.writeValueAsString(info, resp);
         resp.getWriter().write(json);
     }
 
@@ -125,8 +123,9 @@ public class userServlet extends BaseServlet {
             info.setFlag(true);
         }
 
-        ObjectMapper mapper = new ObjectMapper();
-        resp.setContentType("application/json;charset=utf-8");
-        mapper.writeValue(resp.getOutputStream(), info);
+//        ObjectMapper mapper = new ObjectMapper();
+//        resp.setContentType("application/json;charset=utf-8");
+//        mapper.writeValue(resp.getOutputStream(), info);
+        super.writeValue(info, resp);
     }
 }

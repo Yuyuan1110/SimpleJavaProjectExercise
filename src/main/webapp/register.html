@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="bootstrap-5.3.0-dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="jQuery/jquery-3.7.1.min.js"></script>
+    delSelected();
     <title>register</title>
 
     <style>
@@ -198,18 +198,23 @@
 
         $(function () {
             $("#birthday").attr("max", dateLimitFormat());
+
             $("#registerForm").submit(function () {
                 if (checkAccount() && checkUserName() && checkPassword() && checkConfirmPassword() && checkEmail() && checkPhoneNumber() && checkBirthday()) {
-                    $.post("user/register", $("#registerForm").serialize(), function (date) {
-                        if (date.flag) {
+                    $.post("user/register", $("#registerForm").serialize(), function (data) {
+                        if (data.flag) {
                             location.href = 'registerSuccess.html';
                         } else {
-                            $("#err_msg").text(date.errorMsg);
+                            $("#err_msg").text(data.errorMsg);
                         }
                     });
                 }
                 return false;
             });
+
+            $("#house-icon").click(function (){
+                location.href="login.html";
+            })
 
             $("#checkCode").click(function () {
                 var date = new Date().getTime();
@@ -231,7 +236,7 @@
     <div class="container">
         <div class="row ">
             <div class="col-2">
-                <img src="picture/house.png" class="house-icon mt-2">
+                <img src="picture/house.png" class="house-icon mt-2" id="house-icon">
             </div>
             <div class="col-2 offset-8 col-md-1 offset-md-9">
                 <div class="item">
