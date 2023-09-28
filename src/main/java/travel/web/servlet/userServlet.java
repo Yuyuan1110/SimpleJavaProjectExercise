@@ -44,7 +44,7 @@ public class userServlet extends BaseServlet {
 //            String json = mapper.writeValueAsString(info);
 //
 //            resp.setContentType("application/json;charset=utf-8");
-            String json = super.writeValueAsString(info, resp);
+            String json = super.writeValueAsString(info);
             resp.getWriter().write(json);
             return;
         }
@@ -74,7 +74,7 @@ public class userServlet extends BaseServlet {
             info.setErrorMsg("registration fail");
         }
 
-        String json = super.writeValueAsString(info, resp);
+        String json = super.writeValueAsString(info);
         resp.getWriter().write(json);
     }
 

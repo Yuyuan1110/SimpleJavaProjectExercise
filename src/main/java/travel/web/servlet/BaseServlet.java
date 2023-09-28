@@ -39,7 +39,7 @@ public class BaseServlet extends HttpServlet {
     }
 
     //convert input data to json, return String to caller
-    public String writeValueAsString(Object obj, HttpServletResponse resp) throws JsonProcessingException {
+    public String writeValueAsString(Object obj) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         return mapper.writeValueAsString(obj);
     }

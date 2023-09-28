@@ -6,17 +6,21 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import travel.domain.PageBean;
 import travel.domain.Product;
 import travel.service.ProductService;
 import travel.service.impl.ProductServiceImpl;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @WebServlet("/product/*")
 public class productServlet extends BaseServlet {
 
     private ProductService service = new ProductServiceImpl();
+
     public void findAll(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         List<Product> allProduct = service.findAllProduct();
 //        ObjectMapper mapper = new ObjectMapper();
@@ -25,5 +29,25 @@ public class productServlet extends BaseServlet {
 //        mapper.writeValue(resp.getOutputStream(), allProduct);
 
         super.writeValue(allProduct, resp);
+    }
+
+    public void totalCount(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        int totalCount = service.totalCount();
+        super.writeValue(totalCount, resp);
+    }
+
+    public void findByPage(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        Map<String, String[]> parameterMap = req.getParameterMap();
+        int currentPage = Math.abs(Integer.parseInt(parameterMap.get("currentPage") == null ||
+                "".equals(parameterMap.get("currentPage")[0]) ||
+                "0".equals(parameterMap.get("currentPage")[0]) ? "1" : parameterMap.get("currentPage")[0]));
+
+        int rows = Math.abs(Integer.parseInt(parameterMap.get("rows") == null ||
+                "".equals(parameterMap.get("rows")[0]) ||
+                "0".equals(parameterMap.get("rows")[0]) ? "5" : parameterMap.get("rows")[0]));
+
+        PageBean<Product> pb = service.findByPage(currentPage, rows, parameterMap);
+
+        super.writeValue(pb, resp);
     }
 }

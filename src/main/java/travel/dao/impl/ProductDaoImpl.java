@@ -7,7 +7,9 @@ import travel.domain.Product;
 import travel.domain.User;
 import travel.util.JDBCUtils;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class ProductDaoImpl implements ProductDao {
     private JdbcTemplate template = new JdbcTemplate(JDBCUtils.getDataSource());
@@ -15,5 +17,32 @@ public class ProductDaoImpl implements ProductDao {
     public List<Product> findAllProduct() {
         String sql = "select * from product";
         return template.query(sql, new BeanPropertyRowMapper<Product>(Product.class));
+    }
+
+    @Override
+    public int totalCount() {
+        String sql = "select count(*) from product";
+        return template.queryForObject(sql, Integer.class);
+    }
+
+    @Override
+    public List<Product> findByPage(int currentPage, int rows,  Map<String, String[]> parameterMap) {
+        String sql = "select * from PRODUCT where 1=1";
+        List<Object> params = new ArrayList<Object>();
+        for (Map.Entry<String, String[]> entry : parameterMap.entrySet()){
+            if ("currentPage".equals(entry.getKey()) || "rows".equals(entry.getKey())) {
+                continue;
+            }
+            if (!"".equals(entry.getValue()[0]) && entry.getValue()[0] != null) {
+                sql += " and " + entry.getKey() + " like ?";
+                params.add("%" + entry.getValue()[0] + "%");
+            }
+        }
+
+        params.add((currentPage-1)*5);
+        params.add(rows);
+        sql += " limit ?, ?";
+        System.out.println(sql);
+        return template.query(sql, new BeanPropertyRowMapper<Product>(Product.class), params.toArray());
     }
 }
