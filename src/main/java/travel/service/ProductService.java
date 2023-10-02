@@ -8,7 +8,7 @@ import java.util.Map;
 
 public interface ProductService {
     public List<Product> findAllProduct();
-    int totalCount();
+    int totalCount(Map<String, String[]> parameterMap);
 
     PageBean<Product> findByPage(int currentPage, int rows, Map<String, String[]> parameterMap);
 }

@@ -32,7 +32,8 @@ public class productServlet extends BaseServlet {
     }
 
     public void totalCount(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        int totalCount = service.totalCount();
+        Map<String, String[]> parameterMap = req.getParameterMap();
+        int totalCount = service.totalCount(parameterMap);
         super.writeValue(totalCount, resp);
     }
 
@@ -50,4 +51,6 @@ public class productServlet extends BaseServlet {
 
         super.writeValue(pb, resp);
     }
+
+
 }

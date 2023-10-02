@@ -9,7 +9,7 @@ public interface ProductDao {
 
     public List<Product> findAllProduct();
 
-    int totalCount();
+    int totalCount(Map<String, String[]> parameterMap);
 
     List<Product> findByPage(int currentPage,int rows,  Map<String, String[]> parameterMap);
 }

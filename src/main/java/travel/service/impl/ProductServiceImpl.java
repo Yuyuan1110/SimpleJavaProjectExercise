@@ -18,8 +18,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public int totalCount() {
-        return productDao.totalCount();
+    public int totalCount(Map<String, String[]> parameterMap) {
+        return productDao.totalCount(parameterMap);
     }
 
     @Override
@@ -27,7 +27,7 @@ public class ProductServiceImpl implements ProductService {
         PageBean<Product> pb = new PageBean<>();
         pb.setCurrentPage(currentPage);
         pb.setRows(rows);
-        int totalCount = totalCount();
+        int totalCount = totalCount(parameterMap);
         pb.setTotalCount(totalCount);
         if(pb.getTotalCount() % pb.getRows() ==0){
             pb.setTotalPage(pb.getTotalCount()/pb.getRows());

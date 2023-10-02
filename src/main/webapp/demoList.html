@@ -55,17 +55,17 @@
 
 
         function pageList(pb) {
-            var beforeNum = pb.currentPage -1;
-            var afterNum = pb.currentPage +1;
+            var beforeNum = pb.currentPage - 1;
+            var afterNum = pb.currentPage + 1;
             var lis = '';
-            var lastPage = '<li class="page-item enable"><a class="page-link" href="javascript:load('+beforeNum+')"><<</a></li>';
-            var nextPage = '<li class="page-item enable"><a class="page-link" href="javascript:load('+afterNum+')">>></a></li>';
+            var lastPage = '<li class="page-item enable"><a class="page-link" href="javascript:load(' + beforeNum + ')"><<</a></li>';
+            var nextPage = '<li class="page-item enable"><a class="page-link" href="javascript:load(' + afterNum + ')">>></a></li>';
             var pages = '';
             // var pageBody='<li class="page-item active" aria-current="page"><a class="page-link" href="product/findByPage?currentPage=1&rows=5&id=&brand=&name=">1</a></li>';
             for (let i = 1; i <= pb.totalPage; i++) {
 
                 if (pb.currentPage == 1) {
-                    lastPage = '<li class="page-item disabled"><a class="page-link" href="javascript:load('+beforeNum+')"><<</a></li>';
+                    lastPage = '<li class="page-item disabled"><a class="page-link" href="javascript:load(' + beforeNum + ')"><<</a></li>';
                 }
                 if (pb.currentPage == i) {
                     pages += '<li class="page-item active" aria-current="page"><a class="page-link" href="javascript:load(' + i + ')">' + i + '</a></li>';
@@ -74,7 +74,7 @@
                 }
 
                 if (pb.currentPage == pb.totalPage) {
-                    nextPage = '<li class="page-item disabled"><a class="page-link" href="javascript:load('+afterNum+')">>></a></li>';
+                    nextPage = '<li class="page-item disabled"><a class="page-link" href="javascript:load(' + afterNum + ')">>></a></li>';
                 }
             }
             lis += lastPage;
@@ -104,8 +104,13 @@
             return true;
         }
 
-        function load(currentPage) {
-            $.get("product/findByPage", {currentPage: currentPage}, function (pb) {
+        function load(currentPage, id, brand, product_name) {
+            $.get("product/findByPage", {
+                currentPage: currentPage,
+                id: id,
+                brand: brand,
+                product_name: product_name
+            }, function (pb) {
 
                 // private int totalCount;       //total result items of search.
                 // private int totalPage;        //total pages num.
@@ -124,31 +129,20 @@
             })
         }
 
-        $(function () {
+        $("#search_submit").click(function (){
+            $("#search_from").submit();
+        })
 
-            // $.get("product/findAll", {}, function (data) {
-            //
-            //
-            //     product list
-            //     var lis = '<tr>'
-            //     for (var i = 0; i < data.length; i++) {
-            //         var li = '<td><input type="checkbox" style="margin-top: 8px" name="uid" value="' + data[i].id + '"></td>' +
-            //             '<td>' + data[i].id + '</td>' +
-            //             '<td>' + data[i].brand + '</td>' +
-            //             '<td>' + data[i].product_name + '</td>' +
-            //             '<td>' + data[i].price + '</td>' +
-            //             '<td>' +
-            //             '<a class="btn btn-warning" href="">Alter</a>' +
-            //             '<a class="btn btn-danger" href="javascript:deleteUser(' + data[i].id + ')">Delete</a>' +
-            //             '</td>';
-            //         lis += li;
-            //     }
-            //     lis += '</td>'
-            //
-            //     $("#product_contents").append(lis);
-            // })
+        $(function () {
             load();
 
+            $("#search_from").bind("submit", function () {
+                var id = $("#id").val();
+                var brand = $("#brand").val();
+                var product_name = $("#product_name").val();
+                load(null, id, brand, product_name);
+                return false;
+            })
 
             delSelected();
             $("#topCheckbox").click(function () {
@@ -195,18 +189,18 @@
         <div class="col-1">1</div>
     </div>
     <div class="row ">
-        <form class="row g-3" action="/product/search" method="post">
+        <form class="row g-3" action="#" method="get" id="search_from">
             <div class="col-2 align-self-center">
-                <input type="text" placeholder="Product ID" name="PID">
+                <input type="text" placeholder="Product ID" name="id" id="id">
             </div>
             <div class="col-2 align-self-center">
-                <input type="text" placeholder="Product Brand" name="PB">
+                <input type="text" placeholder="Product Brand" name="brand" id="brand">
             </div>
             <div class="col-2 align-self-center">
-                <input type="text" placeholder="Product Name" name="PN">
+                <input type="text" placeholder="Product Name" name="product_name" id="product_name">
             </div>
             <div class="col-1 align-self-center">
-                <button class="btn btn-primary" type="submit">Search</button>
+                <button class="btn btn-primary" type="submit" id="search_submit">Search</button>
             </div>
             <div class="col-1"></div>
             <div class="col-2 align-self-center" style="margin-left: 80px">
