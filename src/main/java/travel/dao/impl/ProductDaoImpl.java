@@ -54,7 +54,26 @@ public class ProductDaoImpl implements ProductDao {
         params.add((currentPage-1)*5);
         params.add(rows);
         sql += " limit ?, ?";
-        System.out.println(sql);
+//        System.out.println(sql);
         return template.query(sql, new BeanPropertyRowMapper<Product>(Product.class), params.toArray());
+    }
+
+    @Override
+    public Product findByProductName(String productName) {
+        Product product = null;
+
+        try {
+            String sql = "select * from product where product_name = ?";
+            product = template.queryForObject(sql, new BeanPropertyRowMapper<Product>(Product.class), productName);
+        } catch (Exception e) {
+        }
+        return product;
+    }
+
+    @Override
+    public void saveProduct(Product product) {
+        System.out.println("save execute");
+        String sql = "insert into product(id, brand, product_name, price) values(?, ?, ?, ?)";
+        template.update(sql, product.getId(), product.getBrand(), product.getProduct_name(), product.getPrice());
     }
 }

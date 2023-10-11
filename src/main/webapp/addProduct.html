@@ -1,49 +1,171 @@
-
 <html>
 <head>
-  <!-- Required meta tags -->
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!-- Bootstrap CSS -->
-  <link href="bootstrap-5.3.0-dist/css/bootstrap.min.css" rel="stylesheet">
-  <title>addProduct</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Bootstrap CSS -->
+    <link href="bootstrap-5.3.0-dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="jQuery/jquery-3.7.1.min.js"></script>
+    <title>addProduct</title>
+
+    <style>
+        .Head-banner {
+            height: 45px;
+            background-color: #0a53be;
+        }
+
+        .Head-banner .head-icon {
+            height: 30px;
+            width: 30px;
+        }
+
+        .house-icon {
+            height: 30px;
+            width: 30px;
+        }
 
 
+        .error-msg {
+            color: red;
+        }
+
+
+    </style>
+    <script type="text/javascript">
+        // $(function () {
+        //     $('#datepicker').datepicker({format: 'yyyy-mm-dd'});
+        // })
+
+
+        function checkProductBrand() {
+            var account = $("#productBrand").val();
+            var reg_account = /^[-_ a-zA-Z0-9]{1,20}$/;
+            var flag = reg_account.test(account);
+            if (flag) {
+                // account reg valid
+                $("#productBrand").css("border", "")
+                $("#brand-error").text("")
+
+                return flag;
+            } else {
+                // account reg invalid
+                $("#productBrand").css("border", "1px solid red")
+                $("#brand-error").text("Brand invalid")
+
+                return flag;
+            }
+        }
+
+        function checkProductName() {
+            var account = $("#productName").val();
+            var reg_account = /^[-_ a-zA-Z0-9]{1,20}$/;
+            var flag = reg_account.test(account);
+            if (flag) {
+                // account reg valid
+                $("#productName").css("border", "")
+                $("#name-error").text("")
+
+                return flag;
+            } else {
+                // account reg invalid
+                $("#productName").css("border", "1px solid red")
+                $("#name-error").text("productName invalid")
+
+                return flag;
+            }
+        }
+
+        function checkPrice() {
+            var phoneNumber = $("#price").val();
+            var reg_phoneNumber = /^[1-9]\d{0,9}$/;
+            if (phoneNumber > 0) {
+                var flag = reg_phoneNumber.test(phoneNumber);
+            } else {
+                flag == false;
+            }
+
+            if (flag) {
+                // valid
+                $("#price").css("border", "")
+                $("#price-error").text("");
+
+                return flag;
+            } else {
+                // invalid
+                $("#price").css("border", "1px solid red")
+                $("#price-error").text("no one can afford it");
+
+                return flag;
+            }
+        }
+
+        $(function () {
+
+            $("#submitForm").submit(function () {
+                if (checkPrice() && checkProductName() && checkProductBrand()) {
+                    $.post("product/addProduct", $("#submitForm").serialize(), function (data) {
+                        data = JSON.parse(data);
+                        if (data.flag) {
+                            location.href = 'demoList.html';
+                        } else {
+                            alert(typeof(data));
+                            $("#err_msg").text(data.errorMsg);
+                        }
+                    });
+                }
+                return false;
+            });
+
+            $("#house-icon").click(function () {
+                location.href = "login.html";
+            })
+
+            $("#productName").blur(checkProductName);
+            $("#productBrand").blur(checkProductBrand);
+            $("#price").blur(checkPrice);
+        });
+    </script>
 </head>
 <body>
 <div class="container">
-  <div class="row justify-content-center">
-    <div class="col-auto">
-      <h1>Add Product Page</h1>
-    </div>
-  </div>
-  <form action="/product/addProduct" method="post">
     <div class="row justify-content-center">
-      <div class="col col-5">
-        <label for="productBrand" class="form-label">product Brand</label>
-        <input type="text" class="form-control" id="productBrand" name="PB">
-      </div>
+        <div class="col-auto">
+            <h1>Add Product Page</h1>
+        </div>
     </div>
-    <div class="row justify-content-center">
-      <div class="col col-5">
-        <label for="productName" class="form-label">product Name</label>
-        <input type="text" class="form-control" id="productName" name="PN">
-      </div>
-    </div>
-    <div class="row justify-content-center">
-      <div class="col-5">
-        <label for="Price" class="form-label">Price</label>
-        <input type="text" class="form-control" id="Price" name="PP">
-      </div>
-    </div>
+    <form action="/product/addProduct" method="post" id="submitForm">
+        <div class="row justify-content-center">
+            <div class="col col-5">
+                <label for="productBrand" class="form-label">product Brand</label>
+                <label class="error-msg fs-6 ms-3" id="brand-error"></label>
+                <input type="text" class="form-control" id="productBrand" name="brand">
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col col-5">
+                <label for="productName" class="form-label">product Name</label>
+                <label class="error-msg fs-6 ms-3" id="name-error"></label>
+                <input type="text" class="form-control" id="productName" name="product_name">
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-5">
+                <label for="Price" class="form-label">Price</label>
+                <label class="error-msg fs-6 ms-3" id="price-error"></label>
+                <input type="text" class="form-control" id="price" name="price">
+            </div>
+        </div>
 
 
-    <div class="row justify-content-center" style="margin-top: 10px">
-      <div class="col-1">
-        <button type="submit" class="btn btn-primary">Submit</button>
-      </div>
-    </div>
-  </form>
+        <div class="row justify-content-center" style="margin-top: 10px">
+            <div class="col-1">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+            <div class="col-1">
+                <div class="col-8 error-msg" id="err_msg">123</div>
+            </div>
+        </div>
+    </form>
 </div>
 
 </div>

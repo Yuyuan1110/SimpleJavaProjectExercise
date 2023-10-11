@@ -1,17 +1,21 @@
 package travel.web.servlet;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.apache.commons.beanutils.BeanUtils;
 import travel.domain.PageBean;
 import travel.domain.Product;
+import travel.domain.ResultInfo;
 import travel.service.ProductService;
 import travel.service.impl.ProductServiceImpl;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -50,6 +54,33 @@ public class productServlet extends BaseServlet {
         PageBean<Product> pb = service.findByPage(currentPage, rows, parameterMap);
 
         super.writeValue(pb, resp);
+    }
+
+    public void addProduct(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        Map<String, String[]> parameterMap = req.getParameterMap();
+        Product product = new Product();
+        try {
+            BeanUtils.populate(product, parameterMap);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        } catch (InvocationTargetException e) {
+            throw new RuntimeException(e);
+        }
+
+
+//        UserService service = new UserServiceImpl();
+        boolean flag = service.addProduct(product);
+        ResultInfo info = new ResultInfo();
+        if (flag) {
+            // registration success
+            info.setFlag(true);
+        } else {
+            info.setFlag(false);
+            info.setErrorMsg("add product fail");
+        }
+
+        String json = super.writeValueAsString(info);
+        resp.getWriter().write(json);
     }
 
 

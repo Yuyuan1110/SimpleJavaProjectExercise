@@ -31,10 +31,11 @@ public class userServlet extends BaseServlet {
 
         // check code verify
         String check = map.get("checkCode")[0];
+        System.out.println(check);
         HttpSession session = req.getSession();
         String checkCode_session = (String) session.getAttribute("checkCode_session");
         session.removeAttribute(checkCode_session);
-        if (!checkCode_session.equalsIgnoreCase(check)) {
+        if (checkCode_session == null || !checkCode_session.equalsIgnoreCase(check)) {
             System.out.println("verification code failed.");
             ResultInfo info = new ResultInfo();
             info.setFlag(false);

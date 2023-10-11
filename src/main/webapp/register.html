@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="bootstrap-5.3.0-dist/css/bootstrap.min.css" rel="stylesheet">
-    delSelected();
+    <script src="jQuery/jquery-3.7.1.min.js"></script>
     <title>register</title>
 
     <style>
@@ -202,9 +202,12 @@
             $("#registerForm").submit(function () {
                 if (checkAccount() && checkUserName() && checkPassword() && checkConfirmPassword() && checkEmail() && checkPhoneNumber() && checkBirthday()) {
                     $.post("user/register", $("#registerForm").serialize(), function (data) {
+                        data = JSON.parse(data);
                         if (data.flag) {
+                            $("#err_msg").text("");
                             location.href = 'registerSuccess.html';
                         } else {
+                            alert(data.flag);
                             $("#err_msg").text(data.errorMsg);
                         }
                     });

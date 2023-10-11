@@ -40,4 +40,15 @@ public class ProductServiceImpl implements ProductService {
 
         return pb;
     }
+
+    @Override
+    public boolean addProduct(Product product) {
+        Product p = productDao.findByProductName(product.getProduct_name());
+        if(p != null){
+            return false;
+        }else {
+            productDao.saveProduct(product);
+            return true;
+        }
+    }
 }

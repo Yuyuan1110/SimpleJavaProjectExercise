@@ -11,4 +11,6 @@ public interface ProductService {
     int totalCount(Map<String, String[]> parameterMap);
 
     PageBean<Product> findByPage(int currentPage, int rows, Map<String, String[]> parameterMap);
+
+    boolean addProduct(Product product);
 }

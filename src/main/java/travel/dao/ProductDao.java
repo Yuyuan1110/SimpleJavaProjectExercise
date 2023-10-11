@@ -12,4 +12,8 @@ public interface ProductDao {
     int totalCount(Map<String, String[]> parameterMap);
 
     List<Product> findByPage(int currentPage,int rows,  Map<String, String[]> parameterMap);
+
+    Product findByProductName(String productName);
+
+    void saveProduct(Product product);
 }
